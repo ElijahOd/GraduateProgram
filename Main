@@ -1,0 +1,143 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp
+{
+    class GraduateProgram
+    {
+        static void Main(string[] args)
+        {
+            //бібліотека слів
+            string sentence = "Задано деякий рядок тексту, що може містити довільну кількість розділових знаків та пропусків між словами, та словник з N слів. Визначити які слова та в якій кількості можна утворити з літер даного тексту.";
+            
+            //введення бібіліотеки слів через консоль
+            //string sentence = Console.ReadLine();
+            
+            //створеня масиву слів без розділових знаків та з нижнім регісторм
+            char[] delims = ".,;:!?\n\xD\xA\" ".ToCharArray();
+            string[] dictionary = sentence.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < dictionary.Length; i++)
+            {
+                dictionary[i] = dictionary[i].ToLower();
+            }
+            
+            //створення двовимірног зубчастого масиву літер
+            char[][] charDictionary = new char[dictionary.Length][];
+            for (int i = 0; i < dictionary.Length; i++)
+            {
+                charDictionary[i] = dictionary[i].ToCharArray();
+            }
+            
+            bool restartProgram;
+            do
+            {
+                //ведення тексту
+                Console.Write("Введіть текст: ");
+                string inputText = Console.ReadLine();
+                
+                //перетворення веденого тексту в масив літер
+                char[] arrText = inputText.ToCharArray();
+                
+                //робимо всі літери масиву з нижнім регістром
+                char[] lowArrText = new char[arrText.Length];
+                for (int i = 0; i < arrText.Length; i++)
+                {
+                    lowArrText[i] = char.ToLower(arrText[i]);
+                }
+                
+                //новий масив без розділових знаків
+                char[] arrLetter = new char[lowArrText.Length];
+                int indexArrLetter = 0;
+                for (int i = 0; i < lowArrText.Length; i++)
+                {
+                    if (char.IsLetter(lowArrText[i]))
+                    {
+                        arrLetter[indexArrLetter] = lowArrText[i];
+                        indexArrLetter++;
+                    }
+                }
+                
+                //лічильник слів
+                int wordCount = 0;
+    
+                for (int i = 0; i < charDictionary.Length; i++)
+                {
+                    int letterCount = 0;
+                    for (int j = 0; j < charDictionary[i].Length; j++)
+                    {
+                        //Contains вказівник, чи зустрічається вказаний символ усередині цього рядка.
+                        if (arrLetter.Contains(charDictionary[i][j]))
+                        {
+                            letterCount++;
+                        }
+                    }
+                    if (letterCount == charDictionary[i].Length)
+                    {
+                        wordCount++;
+                    }
+                }
+                
+                //створення словника для зберігання кількості зустрічей кожного слова
+                List<string> wordName = new List<string>();
+                for (int i = 0; i < charDictionary.Length; i++)
+                {
+                    char[] wordLetters = charDictionary[i];
+                    bool match = true;
+                    for (int j = 0; j < wordLetters.Length; j++)
+                    {
+                        char letter = wordLetters[j];
+                        if (!arrLetter.Contains(letter))
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match)
+                    {
+                        string possibleWord = new string(wordLetters);
+                        //Add метод використовується для додавання кількох елементів
+                        wordName.Add(possibleWord);
+                    }
+                }
+                
+                //правильне закінчення
+                string ending = "";
+                int lastDigit = wordCount % 10;
+                if (lastDigit == 1) 
+                {
+                    ending = "слово";
+                } else if (lastDigit >= 2 && lastDigit <= 4) 
+                        {
+                            ending = "слова";
+                        } 
+                        else 
+                        {
+                            ending = "слів";
+                        }
+                        
+                //виведення результату
+                if (wordCount == 0)
+                {
+                    Console.Write("Нажаль, з данного тексту не можливо утворити жодного слова\nCпробуйте ще");
+                }
+                
+                else
+                {
+                    Console.Write($"З данного тексту можна утворити {wordCount} {ending}.\nА саме: ");
+                    //Console.Write($"А саме: ");
+                    foreach (string word in wordName)
+                    {
+                        string upWord = word.ToUpper();
+                        Console.Write($"{upWord} ");
+                    }
+                }
+                Console.WriteLine("\nБажаєте повторити програму? (y/n)");
+                string restartInput = Console.ReadLine().ToLower();
+                restartProgram = restartInput == "y" || restartInput == "у";
+            } while (restartProgram);
+        }
+    }
+}
