@@ -16,18 +16,15 @@ namespace ConsoleApp
             //введення бібіліотеки слів через консоль
             //string sentence = Console.ReadLine();
             
-            //створеня масиву слів без розділових знаків та з нижнім регісторм
-            char[] delims = ".,;:!?\n\xD\xA\" ".ToCharArray();
+            //створеня масиву слів без розділових знаків
+            char[] delims = ".,;:!?`\n\xD\xA\" ".ToCharArray();
             string[] dictionary = sentence.Split(delims, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < dictionary.Length; i++)
-            {
-                dictionary[i] = dictionary[i].ToLower();
-            }
-            
-            //створення двовимірног зубчастого масиву літер
+
+            //створення двовимірног зубчастого масиву літер з нижнім регісторм
             char[][] charDictionary = new char[dictionary.Length][];
             for (int i = 0; i < dictionary.Length; i++)
             {
+                dictionary[i] = dictionary[i].ToLower();
                 charDictionary[i] = dictionary[i].ToCharArray();
             }
             
@@ -39,24 +36,16 @@ namespace ConsoleApp
                 Console.Write("Введіть текст: ");
                 string inputText = Console.ReadLine();
                 
-                //перетворення веденого тексту в масив літер
-                char[] arrText = inputText.ToCharArray();
-                
-                //робимо всі літери масиву з нижнім регістром
-                char[] lowArrText = new char[arrText.Length];
-                for (int i = 0; i < arrText.Length; i++)
-                {
-                    lowArrText[i] = char.ToLower(arrText[i]);
-                }
-                
-                //новий масив без розділових знаків
-                char[] arrLetter = new char[lowArrText.Length];
+                //створюємо масив літер без розділових знаків та з нижнім регісторм
+                char[] arrLetter = new char[inputText.Length];
                 int indexArrLetter = 0;
-                for (int i = 0; i < lowArrText.Length; i++)
+                for (int i = 0; i < inputText.Length; i++)
                 {
-                    if (char.IsLetter(lowArrText[i]))
+                    arrLetter[i] = char.ToLower(inputText[i]);
+                     
+                     if (char.IsLetter(arrLetter[i]))
                     {
-                        arrLetter[indexArrLetter] = lowArrText[i];
+                        arrLetter[indexArrLetter] = arrLetter[i];
                         indexArrLetter++;
                     }
                 }
@@ -81,7 +70,7 @@ namespace ConsoleApp
                     }
                 }
                 
-                //створення словника для зберігання кількості зустрічей кожного слова
+                //створення списку для зберігання кількості зустрічей кожного слова
                 List<string> wordName = new List<string>();
                 for (int i = 0; i < charDictionary.Length; i++)
                 {
