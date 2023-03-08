@@ -31,6 +31,7 @@ namespace ConsoleApp
                 charDictionary[i] = dictionary[i].ToCharArray();
             }
             
+            //перезавантаження програми
             bool restartProgram;
             do
             {
