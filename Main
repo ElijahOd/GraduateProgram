@@ -8,6 +8,12 @@ namespace ConsoleApp
 {
     class GraduateProgram
     {
+        static string[] GetWords(string text)
+        {
+            char[] delims = ".,;:!?`\n\xD\xA\" ".ToCharArray();
+            string[] cleanText = text.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+            return cleanText;
+        }
         static void Main(string[] args)
         {
             //бібліотека слів
@@ -15,19 +21,16 @@ namespace ConsoleApp
             
             //введення бібіліотеки слів через консоль
             //string sentence = Console.ReadLine();
-            
-            //створеня масиву слів без розділових знаків
-            char[] delims = ".,;:!?`\n\xD\xA\" ".ToCharArray();
-            string[] dictionary = sentence.Split(delims, StringSplitOptions.RemoveEmptyEntries);
 
-            //створення двовимірног зубчастого масиву літер з нижнім регісторм
+            //створення двовимірног зубчастого масиву літер з нижнім регісторм без розділових знаків
+            string[] dictionary = GetWords(sentence);
             char[][] charDictionary = new char[dictionary.Length][];
             for (int i = 0; i < dictionary.Length; i++)
             {
                 dictionary[i] = dictionary[i].ToLower();
                 charDictionary[i] = dictionary[i].ToCharArray();
             }
-            
+                
             //перезавантаження програми
             bool restartProgram;
             do
@@ -37,25 +40,16 @@ namespace ConsoleApp
                 string inputText = Console.ReadLine();
                 
                 //створюємо масив літер без розділових знаків та з нижнім регісторм
-                char[] arrLetter = new char[inputText.Length];
-                int indexArrLetter = 0;
-                for (int i = 0; i < inputText.Length; i++)
-                {
-                    arrLetter[i] = char.ToLower(inputText[i]);
-                     
-                     if (char.IsLetter(arrLetter[i]))
-                    {
-                        arrLetter[indexArrLetter] = arrLetter[i];
-                        indexArrLetter++;
-                    }
-                }
-                
+                string[] arrText = GetWords(inputText);
+                char[] arrLetter = string.Concat(arrText).ToLower().ToCharArray();
+
                 //лічильник слів
                 int wordCount = 0;
     
                 for (int i = 0; i < charDictionary.Length; i++)
                 {
                     int letterCount = 0;
+                    
                     for (int j = 0; j < charDictionary[i].Length; j++)
                     {
                         //Contains вказівник, чи зустрічається вказаний символ усередині цього рядка.
@@ -64,6 +58,7 @@ namespace ConsoleApp
                             letterCount++;
                         }
                     }
+
                     if (letterCount == charDictionary[i].Length)
                     {
                         wordCount++;
@@ -93,6 +88,12 @@ namespace ConsoleApp
                     }
                 }
                 
+                //лічільник використаних літер
+                string stringName = string.Concat(wordName);
+                char[] charName = stringName.ToCharArray();
+                char[] uniqueName = charName.Distinct().ToArray();
+                string resultUniqueName = new string(uniqueName); 
+                
                 //правильне закінчення
                 string ending = "";
                 int lastDigit = wordCount % 10;
@@ -113,10 +114,10 @@ namespace ConsoleApp
                 {
                     Console.Write("Нажаль, з данного тексту не можливо утворити жодного слова\nCпробуйте ще");
                 }
-                
                 else
                 {
-                    Console.Write($"З данного тексту можна утворити {wordCount} {ending}.\nА саме: ");
+                    Console.WriteLine($"Використано літер для утвореня слів {resultUniqueName.Length} з {arrLetter.Length}");
+                    Console.Write($"З данного тексту можна утворити {wordCount} {ending} з {dictionary.Length} можливих\nА саме: ");
                     //Console.Write($"А саме: ");
                     foreach (string word in wordName)
                     {
@@ -126,6 +127,7 @@ namespace ConsoleApp
                 }
                 Console.WriteLine("\nБажаєте повторити програму? (y/n)");
                 string restartInput = Console.ReadLine().ToLower();
+                Console.WriteLine();
                 restartProgram = restartInput == "y" || restartInput == "у";
             } while (restartProgram);
         }
