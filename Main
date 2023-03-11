@@ -18,7 +18,7 @@ namespace ConsoleApp
         {
             //бібліотека слів
             string sentence = "Задано деякий рядок тексту, що може містити довільну кількість розділових знаків й пропусків між словами, і словник N слів. Визначити які слова та в якій кількості можна утворити з літер даного тексту.";
-            
+
             //введення бібіліотеки слів через консоль
             //string sentence = Console.ReadLine();
 
@@ -30,26 +30,26 @@ namespace ConsoleApp
                 dictionary[i] = dictionary[i].ToLower();
                 charDictionary[i] = dictionary[i].ToCharArray();
             }
-                
+
             //перезавантаження програми
             bool restartProgram;
             do
             {
                 //ведення тексту
-                Console.Write("Введіть текст: ");
+                Console.Write("Введiть текст: ");
                 string inputText = Console.ReadLine();
-                
+
                 //створюємо масив літер без розділових знаків та з нижнім регісторм
                 string[] arrText = GetWords(inputText);
                 char[] arrLetter = string.Concat(arrText).ToLower().ToCharArray();
 
                 //лічильник слів
                 int wordCount = 0;
-    
+
                 for (int i = 0; i < charDictionary.Length; i++)
                 {
                     int letterCount = 0;
-                    
+
                     for (int j = 0; j < charDictionary[i].Length; j++)
                     {
                         //Contains вказівник, чи зустрічається вказаний символ усередині цього рядка.
@@ -64,7 +64,7 @@ namespace ConsoleApp
                         wordCount++;
                     }
                 }
-                
+
                 //створення списку для зберігання кількості зустрічей кожного слова
                 List<string> wordName = new List<string>();
                 for (int i = 0; i < charDictionary.Length; i++)
@@ -87,28 +87,29 @@ namespace ConsoleApp
                         wordName.Add(possibleWord);
                     }
                 }
-                
+
                 //лічільник використаних літер
                 string stringName = string.Concat(wordName);
                 char[] charName = stringName.ToCharArray();
                 char[] uniqueName = charName.Distinct().ToArray();
-                string resultUniqueName = new string(uniqueName); 
-                
+                string resultUniqueName = new string(uniqueName);
+
                 //правильне закінчення
                 string ending = "";
                 int lastDigit = wordCount % 10;
-                if (lastDigit == 1) 
+                if (lastDigit == 1)
                 {
                     ending = "слово";
-                } else if (lastDigit >= 2 && lastDigit <= 4) 
-                        {
-                            ending = "слова";
-                        } 
-                        else 
-                        {
-                            ending = "слів";
-                        }
-                        
+                }
+                else if (lastDigit >= 2 && lastDigit <= 4)
+                {
+                    ending = "слова";
+                }
+                else
+                {
+                    ending = "слiв";
+                }
+
                 //виведення результату
                 if (wordCount == 0)
                 {
@@ -116,9 +117,8 @@ namespace ConsoleApp
                 }
                 else
                 {
-                    Console.WriteLine($"Використано літер для утвореня слів {resultUniqueName.Length} з {arrLetter.Length}");
+                    Console.WriteLine($"Використано лiтер для утвореня слiв {resultUniqueName.Length} з {arrLetter.Length}");
                     Console.Write($"З данного тексту можна утворити {wordCount} {ending} з {dictionary.Length} можливих\nА саме: ");
-                    //Console.Write($"А саме: ");
                     foreach (string word in wordName)
                     {
                         string upWord = word.ToUpper();
